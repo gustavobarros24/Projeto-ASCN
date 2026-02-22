@@ -125,14 +125,14 @@ O segundo problema relacionado à `ORIGIN` foi identificado ao tentar efetuar o 
 ## Benchmarking
 
  - [x] Usar a ferramenta de monitorização do Google Cloud para obter métricas.
- - [ ] Desenvolver testes experimentais para avaliar funcionalidades e componentes da aplicação.
+ - [x] Desenvolver testes experimentais para avaliar funcionalidades e componentes da aplicação.
 
 ### Relatório
 
  - [x] Responder às questões 1 e 2.
- - [] Explicar o porquê de ser escolhida a base de dados para ser efetuada a replicação e porquê este método.
+ - [x] Explicar o porquê de ser escolhida a base de dados para ser efetuada a replicação e porquê este método.
  - [x] Descrição breve da arquitetura, API e principais componentes da app.
  - [x] Identificar as ferramentas e abordagens utilizadas para instalação e configuração automática da app.
  - [x] Ferramentas de monitorização, métricas e visualizações escolhidas, justificando a sua escolha. (Provavelmente vai ser o disponibilizado pelo GoogleCloud).
- - [ ] Análise de resultados.
- - [ ] Reflexão final discutindo pontos fortes e pontos a melhorar, e ainda acrescentar comparação com o relatório inicial.
+ - [x] Análise de resultados.
+ - [x] Reflexão final discutindo pontos fortes e pontos a melhorar, e ainda acrescentar comparação com o relatório inicial.
