@@ -1,0 +1,10 @@
+- name: "Undeploy Postgres & AirTrail with Kubernetes"
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: undeploy-airtrail
+      tags: ["airtrail"]
+    - role: undeploy-postgres
+      tags: ["postgres"]
+    - role: delete-secrets
+      tags: ["secrets"]

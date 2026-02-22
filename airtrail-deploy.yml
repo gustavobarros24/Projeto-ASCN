@@ -1,0 +1,10 @@
+- name: "Deploy Postgres & Airtrail with Kubernetes"
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: create-secrets
+      tags: ["secrets"]
+    - role: deploy-postgres
+      tags: ["postgres"]
+    - role: deploy-airtrail
+      tags: ["airtrail"]

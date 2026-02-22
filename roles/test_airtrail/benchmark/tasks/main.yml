@@ -1,0 +1,17 @@
+---
+- name: Refresh inventory
+  ansible.builtin.meta: refresh_inventory
+
+- name: Instalar apache2-utils para o benchmark
+  ansible.builtin.package:
+    name: apache2-utils
+    state: present
+  become: true
+
+- name: Executar Benchmark (100 pedidos, 10 utilizadores concorrentes)
+  ansible.builtin.command: "ab -n 100 -c 10 http://{{ app_ip }}:{{ app_port }}/"
+  register: benchmark_output
+
+- name: Mostrar métricas no terminal
+  ansible.builtin.debug:
+    var: benchmark_output.stdout_lines

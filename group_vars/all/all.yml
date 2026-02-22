@@ -1,0 +1,7 @@
+# Database configurations
+db_host: airtrail-db
+db_image: postgres:latest
+db_name: airtrail
+db_username: "{{ vault_db_username }}"
+db_password: "{{ vault_db_password }}"
+db_url: "postgres://{{ db_username }}:{{ db_password }}@{{ db_host }}:5432/{{ db_name }}"

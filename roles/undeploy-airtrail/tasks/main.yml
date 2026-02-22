@@ -1,0 +1,13 @@
+- name: Delete AirTrail Deployment
+  kubernetes.core.k8s:
+    state: absent
+    kind: Deployment
+    namespace: default
+    name: airtrail-deployment
+
+- name: Delete AirTrail Service
+  kubernetes.core.k8s:
+    state: absent
+    kind: Service
+    namespace: default
+    name: airtrail-service

@@ -1,0 +1,5 @@
+- name: Create Database Secret
+  kubernetes.core.k8s:
+    definition: "{{ lookup('template', 'database-secret.yml') | from_yaml }}"
+    state: present
+    wait: true

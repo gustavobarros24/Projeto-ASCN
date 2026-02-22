@@ -1,0 +1,6 @@
+- name: Delete Database Secrets
+  kubernetes.core.k8s:
+    state: absent
+    kind: Secret
+    namespace: default
+    name: database-secret

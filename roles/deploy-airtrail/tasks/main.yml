@@ -1,0 +1,61 @@
+- name: Create a service for exposing AirTrail
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'airtrail-service.yml') | from_yaml }}"
+    wait: true
+
+- name: Wait till AirTrail service is created
+  kubernetes.core.k8s_info:
+    kind: Service
+    namespace: default
+    name: airtrail-service
+  register: airtrail_service_info
+  until: airtrail_service_info.resources[0].status.loadBalancer.ingress[0].ip is defined
+  retries: 10
+  delay: 10
+
+- name: Extract AirTrail Service Cluster IP
+  set_fact:
+    airtrail_service_external_ip: "{{ airtrail_service_info.resources[0].status.loadBalancer.ingress[0].ip }}"
+    airtrail_service_port: "{{ airtrail_service_info.resources[0].spec.ports[0].port }}"
+
+- name: Debug AirTrail Service Cluster IP and Port
+  debug:
+    msg: "AirTrail Service Cluster IP: {{ airtrail_service_external_ip }}, Port: {{ airtrail_service_port }}"
+
+- name: Update app_ip in inventory
+  ansible.builtin.lineinfile:
+    path: "{{ playbook_dir }}/inventory/gcp.yml"
+    regexp: '^    app_ip: .*'
+    line: "    app_ip: {{ airtrail_service_external_ip }}"
+
+- name: Update app_port in inventory
+  lineinfile:
+    path: "{{ playbook_dir }}/inventory/gcp.yml"
+    regexp: '^    app_port: .*'
+    line: "    app_port: {{ airtrail_service_port }}"
+
+- name: Create a Deployment for AirTrail with dynamic ORIGIN
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'airtrail-deployment.yml') | from_yaml }}"
+    wait: true
+  vars:
+    origin_url: "http://{{ airtrail_service_external_ip }}:{{ airtrail_service_port }}"
+
+- name: Create HPA for AirTrail
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'airtrail-hpa.yml') | from_yaml }}"
+    wait: true
+
+- name: Wait till AirTrail pod is created
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: default
+    label_selectors:
+      - app=airtrail
+    wait: true
+    wait_sleep: 5
+    wait_timeout: 180
+  register: airtrail_pod_info
